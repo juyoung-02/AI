@@ -1,34 +1,23 @@
 import logging
 from typing import List, Dict
 
-from .config import GEMINI_API_KEY
-
-try:
-    import google.generativeai as genai
-except ImportError as e:
-    genai = None
-    logging.warning("google-generativeai package is not installed: %s", e)
+from .gemini import generate, available
 
 
 class ResponseGenerator:
     """Generate responses using Gemini 2.0 Flash when available."""
 
     def __init__(self):
-        if genai and GEMINI_API_KEY:
-            genai.configure(api_key=GEMINI_API_KEY)
-            self.model = genai.GenerativeModel("gemini-2.0-flash")
-        else:
-            self.model = None
+        pass
 
     def generate(self, context: List[Dict], emotion_profile: Dict) -> str:
         prompt = self._build_prompt(context, emotion_profile)
-        if self.model:
+        if available():
             try:
-                response = self.model.generate_content(prompt)
-                return response.text
+                return generate(prompt)
             except Exception as exc:
                 logging.error("Gemini API call failed: %s", exc)
-        # Fallback echo response
+
         last_message = context[-1]["message"] if context else ""
         return f"[AI 응답 - 온정도 {emotion_profile['온정도']}] {last_message}"
 

@@ -1,11 +1,11 @@
 import datetime
 from .pipeline import AIFriend
-from .config import GEMINI_API_KEY
+from .gemini import available
 
 
 def run():
-    if not GEMINI_API_KEY:
-        print("Warning: GEMINI_API_KEY is not set. Using fallback responses.")
+    if not available():
+        print("Warning: Gemini model unavailable. Using fallback heuristics.")
     ai = AIFriend()
     session_id = "session"
     print("AI 친구와 대화를 시작합니다. 종료하려면 'exit'를 입력하세요.")

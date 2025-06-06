@@ -1,4 +1,14 @@
+import json
 from typing import Dict
+
+from .gemini import generate, available
+
+
+SYSTEM_PROMPT = (
+    "시스템 역할: 당신은 커뮤니티 AI의 사용자 신원 식별 담당자입니다. "
+    "주요 임무: 입력된 메시지를 분석하여 사용자를 식별하고 관계 그래프를 유지관리합니다. "
+    "출력은 JSON 형식으로 작성합니다."
+)
 
 
 class IdentityModule:
@@ -8,6 +18,17 @@ class IdentityModule:
         self.next_id = 1
 
     def identify(self, message: str, session_id: str, timestamp: str) -> Dict:
+        if available():
+            prompt = (
+                f"메시지 내용: {message}\n시간 정보: {timestamp}\n세션 ID: {session_id}"
+            )
+            try:
+                raw = generate(prompt, SYSTEM_PROMPT)
+                data = json.loads(raw)
+                return data
+            except Exception:
+                pass  # fallback below
+
         user_id = self.sessions.get(session_id)
         if user_id is None:
             user_id = f"user_{self.next_id}"
