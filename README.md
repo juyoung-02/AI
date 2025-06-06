@@ -12,12 +12,15 @@ multiple modules:
 
 ## Usage
 
-Install the Gemini client and set the API key before running:
+Install the Gemini client and set the `GEMINI_API_KEY` environment variable before running:
 
 ```bash
 pip install google-generativeai
 export GEMINI_API_KEY=your-key-here
 ```
+
+Replace `your-key-here` with your actual API key. Keep this value private and
+avoid committing it to version control.
 
 All modules attempt to use the Gemini 2.0 Flash model and only fall back to
 simple heuristics when the model is unavailable.

@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone
 from typing import Dict, List
 
 
@@ -9,7 +9,7 @@ class MetaLearner:
     def record(self, user_id: str, message: str, response: str) -> None:
         self.log.append(
             {
-                "timestamp": datetime.datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "user_id": user_id,
                 "message": message,
                 "response": response,

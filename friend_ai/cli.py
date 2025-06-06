@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone
 from .pipeline import AIFriend
 from .gemini import available
 
@@ -13,7 +13,7 @@ def run():
         user_input = input("당신: ")
         if user_input.strip().lower() == "exit":
             break
-        timestamp = datetime.datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         reply, info = ai.interact(user_input, session_id, timestamp)
         print(f"AI: {reply}")
 
